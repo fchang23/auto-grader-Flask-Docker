@@ -3,19 +3,26 @@ import subprocess
 from flask import Flask, request, redirect, url_for, render_template, send_from_directory
 from werkzeug import secure_filename
 
-UPLOAD_FOLDER = '/home/ubuntu/test/uploads'
+UPLOAD_FOLDER = './uploads'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+app.add_url_rule('/uploads/<filename>', 'uploaded_file',
+                 build_only=True)
+app.wsgi_app = SharedDataMiddleware(app.wsgi_app, {
+    '/uploads':  app.config['UPLOAD_FOLDER']
+})
+
+
 def compile():
     subprocess.call("rm -f ./a.out", shell=True)
-    retcode = subprocess.call("/usr/bin/g++ /home/ubuntu/test/uploads/walk.cc", shell=True) 
+    retcode = subprocess.call("/usr/bin/g++ uploads/walk.cc", shell=True) 
     if retcode:
         print("failed to compile walk.cc") 
         exit
     subprocess.call("rm -f ./output", shell=True) 
-    retcode = subprocess.call("/home/ubuntu/test/test.sh", shell=True)
+    retcode = subprocess.call("./test.sh", shell=True)
     print "Score: " + str(retcode) + " out of 2 correct."
     print "*************Original submission*************" 
     with open('uploads/walk.cc','r') as fs:
