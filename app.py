@@ -23,8 +23,13 @@ def compile():
         exit
     subprocess.call("rm -f ./output", shell=True) 
     retcode = subprocess.call("./test.sh", shell=True)
+<<<<<<< HEAD
     print ("Score: " + str(retcode) + " out of 2 correct.")
     print ("*************Original submission*************")
+=======
+    print "Score: " + str(retcode) + " out of 2 correct."
+    print "*************Original submission*************" 
+>>>>>>> 1b613b2beaf7878d02580f6ee93a6ae0251ce3c3
     with open('uploads/walk.cc','r') as fs:
       print (fs.read())
     return "Score:" + str(retcode) + " out of 2 correct."
